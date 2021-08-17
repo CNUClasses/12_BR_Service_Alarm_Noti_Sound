@@ -8,7 +8,8 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by Perkins on 4/7/2016.
@@ -21,7 +22,13 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
         doNoti();
         //play a sound
         playSound();
+        stopSelf();
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     private static final int MAX_STREAMS = 10;
@@ -45,6 +52,7 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
 
         //load our sounds
         dogsound = sp.load(this, R.raw.dog, 0);
+
     }
 
     private static final int MYNOTIFICATION = 3;
