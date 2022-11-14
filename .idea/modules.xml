@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/12_BR_Service_Alarm_Noti_Sound.iml" filepath="$PROJECT_DIR$/12_BR_Service_Alarm_Noti_Sound.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/12_BR_Service_Alarm_Noti_Sound.app.unitTest.iml" />
     </modules>
   </component>
 </project>

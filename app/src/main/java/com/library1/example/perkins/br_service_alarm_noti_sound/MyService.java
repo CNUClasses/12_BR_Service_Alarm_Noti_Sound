@@ -5,8 +5,10 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -18,6 +20,16 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // runs in the same thread as the calling app
+        // so what happens if service is not snappy?
+//        try
+//        {
+//            Thread.sleep(5000);
+//        }
+//        catch(InterruptedException ex)
+//        {
+//            Thread.currentThread().interrupt();
+//        }
         //send a notification
         doNoti();
         //play a sound
@@ -44,15 +56,27 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
 
     int dogsound;
     private void playSound() {
+
         //get soundpool object
-        sp = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);    //srcQuality Currently has no effect. Use 0 for the default.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+            sp = new SoundPool.Builder()
+                    .setMaxStreams(MAX_STREAMS)       //can have a max of MAX_STREAMS streams, add another and the first rolls off the queue
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        } else {
+            sp = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);    //srcQuality Currently has no effect. Use 0 for the default.
+        }
 
         //listen for when following loads are done
         sp.setOnLoadCompleteListener(this);
 
         //load our sounds
         dogsound = sp.load(this, R.raw.dog, 0);
-
     }
 
     private static final int MYNOTIFICATION = 3;
@@ -62,13 +86,10 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
         Notification noti = new Notification.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("Just a Notice")
-                .setSmallIcon(R.drawable.smallpic)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setOngoing(false)						//true only dismissable by app
-                .setProgress(100,10,true )				//show a progress bar
+//                .setProgress(100,10,true )				//show a progress bar
                 .build();
-
-        // Hide the notification after its selected
-        //noti.flags |= Notification.FLAG_AUTO_CANCEL;
 
         notificationManager.notify(MYNOTIFICATION, noti);
      }
@@ -114,4 +135,9 @@ public class MyService extends Service implements SoundPool.OnLoadCompleteListen
         //create stream, the int returned is the value you use to clobber it
         dogClobberID = sp.play(dogsound, LEFTVOLUME, RIGHTVOLUME, PRIORITY, LOOPNOT, RATE);
      }
+
+    @Override
+    public boolean stopService(Intent name) {
+        return super.stopService(name);
+    }
 }
